@@ -1,0 +1,4 @@
+build/
+src/hardfloat/
+*.zip
+*.DS_Store
