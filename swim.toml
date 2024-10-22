@@ -5,3 +5,7 @@ name = "hardfloat"
 # get berkley hardfloat
 preprocessing = ["chmod +x ./get_hardfloat.sh", "./get_hardfloat.sh"]
 extra_verilog = ["src/hardfloat/*.v", "src/hardfloat/*.vi"]
+
+[compiler]
+git = "git@gitlab.com:deepsilicon/spade.git"
+commit = "a198370293ca105125a671f7a8ff07786c843b7c"
