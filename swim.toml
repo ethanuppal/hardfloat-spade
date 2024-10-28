@@ -8,4 +8,4 @@ extra_verilog = ["src/hardfloat/*.v", "src/hardfloat/*.vi"]
 
 [compiler]
 git = "git@gitlab.com:deepsilicon/spade.git"
-commit = "a198370293ca105125a671f7a8ff07786c843b7c"
+commit = "17335fd229471458a7a7d93d8c82ae7d95213f62"

@@ -6,44 +6,54 @@
 
 /// Converts from a standard format into HardFloat’s equivalent recoded format.
 #[no_mangle]
-entity fNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth>(
-    #[no_mangle] control: uint<1>,                       // input [(`floatControlWidth - 1):0] control,
-    #[no_mangle] signedIn: bool,                         // input signedIn,
-    #[no_mangle] in: uint<intWidth>,                    // input [(intWidth - 1):0] in,
-    #[no_mangle] roundingMode: uint<3>,                  // input [2:0] roundingMode,
-    #[no_mangle] out: inv &uint<{expWidth + sigWidth}>,  // output [(expWidth + sigWidth):0] out,
-    #[no_mangle] exceptionFlags: inv &uint<5>            // output [4:0] exceptionFlags
-) __builtin__
+entity fNToRecFN <#uint intWidth, #uint expWidth, #uint sigWidth, #uint Sum>(
+    #[no_mangle] control: uint<1>,        // input [(`floatControlWidth - 1):0] control,
+    #[no_mangle] signedIn: bool,          // input signedIn,
+    #[no_mangle] in: uint<intWidth>,      // input [(intWidth - 1):0] in,
+    #[no_mangle] roundingMode: uint<3>,   // input [2:0] roundingMode,
+    #[no_mangle] out: inv &uint<Sum>,     // output [(expWidth + sigWidth):0] out,
+    #[no_mangle] exceptionFlags: inv &uint<5>  // output [4:0] exceptionFlags
+) where
+    Sum: {expWidth + sigWidth}
+__builtin__
 
 /// Converts back from a recoded format to standard format.
 #[no_mangle]
-entity recFNToFN<#uint expWidth, #uint sigWidth>(
-    #[no_mangle] in: uint<{expWidth + sigWidth}>,            // input [(expWidth + sigWidth):0] in,
-    #[no_mangle] out: inv &uint<{expWidth + sigWidth - 1}>   // output [(expWidth + sigWidth - 1):0] out
-) __builtin__
+entity recFNToFN <#uint expWidth, #uint sigWidth, #uint Sum, #uint SumMinus1>(
+    #[no_mangle] in: uint<Sum>,            // input [(expWidth + sigWidth):0] in,
+    #[no_mangle] out: inv &uint<SumMinus1>   // output [(expWidth + sigWidth - 1):0] out
+) where
+    Sum: {expWidth + sigWidth},
+    SumMinus1: {expWidth + sigWidth - 1}
+__builtin__
 
 /// Converts from an integer type to floating-point in recoded form.
 /// The input named `in` is interpreted as an unsigned integer if `signedIn` is false, or as a signed integer if `signedIn` is true.
 #[no_mangle]
-entity iNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth>(
+entity iNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth, #uint Sum>(
     #[no_mangle] control: uint<1>,                       // input [(`floatControlWidth - 1):0] control,
     #[no_mangle] signedIn: bool,                         // input signedIn,
-    #[no_mangle] in: uint<{intWidth}>,                   // input [(intWidth - 1):0] in,
+    #[no_mangle] in: uint<intWidth>,                     // input [(intWidth - 1):0] in,
     #[no_mangle] roundingMode: uint<3>,                  // input [2:0] roundingMode,
-    #[no_mangle] out: inv &uint<{expWidth + sigWidth}>,  // output [(expWidth + sigWidth):0] out,
+    #[no_mangle] out: inv &uint<Sum>,                    // output [(expWidth + sigWidth):0] out,
     #[no_mangle] exceptionFlags: inv &uint<5>            // output [4:0] exceptionFlags
-) __builtin__
+) where
+    Sum: {expWidth + sigWidth}
+__builtin__
 
 /// Performs a similar function, but returns a floating-point value in deconstructed form.
 #[no_mangle]
-entity iNToRawFN<#uint intWidth>(
+entity iNToRawFN<#uint intWidth, #uint ExpWidthPlus3, #uint SigWidthPlus1>(
     #[no_mangle] signedIn: bool,                          // input signedIn,
-    #[no_mangle] in: uint<{intWidth}>,                    // input [(intWidth - 1):0] in,
+    #[no_mangle] in: uint<intWidth>,                      // input [(intWidth - 1):0] in,
     #[no_mangle] isZero: inv &bool,                       // output isZero,
     #[no_mangle] sign: inv &bool,                         // output sign,
-    #[no_mangle] sExp: inv &int<{uint_bits_to_fit(intWidth) + 3}>,   // output signed [(uint_bits_to_fit(intWidth) + 2):0] sExp,
-    #[no_mangle] sig: inv &uint<{intWidth + 1}>           // output [intWidth:0] sig
-) __builtin__
+    #[no_mangle] sExp: inv &int<ExpWidthPlus3>,           // output signed [(uint_bits_to_fit(intWidth) + 2):0] sExp,
+    #[no_mangle] sig: inv &uint<SigWidthPlus1>            // output [intWidth:0] sig
+) where
+    ExpWidthPlus3: {uint_bits_to_fit(intWidth) + 3},
+    SigWidthPlus1: {intWidth + 1}
+__builtin__
 
 /// Converts from a floating-point value in recoded form to an integer type.
 /// The output named `out` is an unsigned integer if input `signedOut` is false, or is a signed integer if `signedOut` is true.
@@ -52,85 +62,103 @@ entity iNToRawFN<#uint intWidth>(
 /// Instead, if a system has no other way to indicate that a conversion to integer overflowed, the standard requires that the floating-point invalid exception be raised, not floating-point overflow.
 /// Hence, the invalid and overflow bits from `intExceptionFlags` will typically be ORed together to contribute to the usual floating-point invalid exception.
 #[no_mangle]
-entity recFNToIN<#uint expWidth, #uint sigWidth, #uint intWidth>(
+entity recFNToIN<#uint expWidth, #uint sigWidth, #uint intWidth, #uint Sum, #uint IntWidthMinus1>(
     #[no_mangle] control: uint<1>,                       // input [(`floatControlWidth - 1):0] control,
-    #[no_mangle] in: uint<{expWidth + sigWidth}>,        // input [(expWidth + sigWidth):0] in,
+    #[no_mangle] in: uint<Sum>,                          // input [(expWidth + sigWidth):0] in,
     #[no_mangle] roundingMode: uint<3>,                  // input [2:0] roundingMode,
     #[no_mangle] signedOut: bool,                        // input signedOut,
-    #[no_mangle] out: inv &uint<{intWidth - 1}>,         // output [(intWidth - 1):0] out,
+    #[no_mangle] out: inv &uint<IntWidthMinus1>,         // output [(intWidth - 1):0] out,
     #[no_mangle] intExceptionFlags: inv &uint<3>         // output [2:0] intExceptionFlags
-) __builtin__
+) where
+    Sum: {expWidth + sigWidth},
+    IntWidthMinus1: {intWidth - 1}
+__builtin__
 
 /// Converts a recoded floating-point value to a different recoded format (such as from single-precision to double-precision, or vice versa).
 /// This module requires no special explanation.
 #[no_mangle]
-entity recFNToRecFN<#uint inExpWidth, #uint inSigWidth, #uint outExpWidth, #uint outSigWidth>(
+entity recFNToRecFN<#uint inExpWidth, #uint inSigWidth, #uint outExpWidth, #uint outSigWidth, #uint InSum, #uint OutSum>(
     #[no_mangle] control: uint<1>,                           // input [(`floatControlWidth - 1):0] control,
-    #[no_mangle] in: uint<{inExpWidth + inSigWidth}>,        // input [(inExpWidth + inSigWidth):0] in,
+    #[no_mangle] in: uint<InSum>,                            // input [(inExpWidth + inSigWidth):0] in,
     #[no_mangle] roundingMode: uint<3>,                      // input [2:0] roundingMode,
-    #[no_mangle] out: inv &uint<{outExpWidth + outSigWidth}>,// output [(outExpWidth + outSigWidth):0] out,
+    #[no_mangle] out: inv &uint<OutSum>,                     // output [(outExpWidth + outSigWidth):0] out,
     #[no_mangle] exceptionFlags: inv &uint<5>                // output [4:0] exceptionFlags
-) __builtin__
+) where
+    InSum: {inExpWidth + inSigWidth},
+    OutSum: {outExpWidth + outSigWidth}
+__builtin__
 
 /// Adds or subtracts two recoded floating-point values, returning a result in the same format.
 /// When input `subOp` is 0, the operation is addition (`a + b`), and when it is 1, the operation is subtraction (`a − b`).
 #[no_mangle]
-entity addRecFN<#uint expWidth, #uint sigWidth>(
+entity addRecFN<#uint expWidth, #uint sigWidth, #uint Sum>(
     #[no_mangle] control: uint<1>,                       // input [(`floatControlWidth - 1):0] control,
     #[no_mangle] subOp: bool,                            // input subOp,
-    #[no_mangle] a: uint<{expWidth + sigWidth}>,         // input [(expWidth + sigWidth):0] a,
-    #[no_mangle] b: uint<{expWidth + sigWidth}>,         // input [(expWidth + sigWidth):0] b,
+    #[no_mangle] a: uint<Sum>,                           // input [(expWidth + sigWidth):0] a,
+    #[no_mangle] b: uint<Sum>,                           // input [(expWidth + sigWidth):0] b,
     #[no_mangle] roundingMode: uint<3>,                  // input [2:0] roundingMode,
-    #[no_mangle] out: inv &uint<{expWidth + sigWidth}>,  // output [(expWidth + sigWidth):0] out,
+    #[no_mangle] out: inv &uint<Sum>,                    // output [(expWidth + sigWidth):0] out,
     #[no_mangle] exceptionFlags: inv &uint<5>            // output [4:0] exceptionFlags
-) __builtin__
+) where
+    Sum: {expWidth + sigWidth}
+__builtin__
 
 /// Returns the intermediate result of addition or subtraction before rounding, as a “raw” deconstructed floating-point value with two extra bits of significand.
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
 /// Module `roundRawFNToRecFN` can be used to round the intermediate result in conformance with the IEEE Standard.
 #[no_mangle]
-entity addRecFNToRaw<#uint expWidth, #uint sigWidth>(
+entity addRecFNToRaw<#uint expWidth, #uint sigWidth, #uint Sum, #uint ExpWidthPlus2, #uint SigWidthPlus3>(
     #[no_mangle] control: uint<1>,                           // input [(`floatControlWidth - 1):0] control,
     #[no_mangle] subOp: bool,                                // input subOp,
-    #[no_mangle] a: uint<{expWidth + sigWidth}>,             // input [(expWidth + sigWidth):0] a,
-    #[no_mangle] b: uint<{expWidth + sigWidth}>,             // input [(expWidth + sigWidth):0] b,
+    #[no_mangle] a: uint<Sum>,                               // input [(expWidth + sigWidth):0] a,
+    #[no_mangle] b: uint<Sum>,                               // input [(expWidth + sigWidth):0] b,
     #[no_mangle] roundingMode: uint<3>,                      // input [2:0] roundingMode,
     #[no_mangle] invalidExc: inv &bool,                      // output invalidExc,
     #[no_mangle] out_isNaN: inv &bool,                       // output out_isNaN,
     #[no_mangle] out_isInf: inv &bool,                       // output out_isInf,
     #[no_mangle] out_isZero: inv &bool,                      // output out_isZero,
     #[no_mangle] out_sign: inv &bool,                        // output out_sign,
-    #[no_mangle] out_sExp: inv &int<{expWidth + 2}>,         // output signed [(expWidth + 1):0] out_sExp,
-    #[no_mangle] out_sig: inv &uint<{sigWidth + 3}>          // output [(sigWidth + 2):0] out_sig
-) __builtin__
+    #[no_mangle] out_sExp: inv &int<ExpWidthPlus2>,          // output signed [(expWidth + 1):0] out_sExp,
+    #[no_mangle] out_sig: inv &uint<SigWidthPlus3>           // output [(sigWidth + 2):0] out_sig
+) where
+    Sum: {expWidth + sigWidth},
+    ExpWidthPlus2: {expWidth + 2},
+    SigWidthPlus3: {sigWidth + 3}
+__builtin__
 
 /// Multiplies two recoded floating-point values, returning a result in the same format.
 #[no_mangle]
-entity mulRecFN<#uint expWidth, #uint sigWidth>(
+entity mulRecFN<#uint expWidth, #uint sigWidth, #uint Sum>(
     #[no_mangle] control: uint<1>,                       // input [(`floatControlWidth - 1):0] control,
-    #[no_mangle] a: uint<{expWidth + sigWidth}>,         // input [(expWidth + sigWidth):0] a,
-    #[no_mangle] b: uint<{expWidth + sigWidth}>,         // input [(expWidth + sigWidth):0] b,
+    #[no_mangle] a: uint<Sum>,                           // input [(expWidth + sigWidth):0] a,
+    #[no_mangle] b: uint<Sum>,                           // input [(expWidth + sigWidth):0] b,
     #[no_mangle] roundingMode: uint<3>,                  // input [2:0] roundingMode,
-    #[no_mangle] out: inv &uint<{expWidth + sigWidth}>,  // output [(expWidth + sigWidth):0] out,
+    #[no_mangle] out: inv &uint<Sum>,                    // output [(expWidth + sigWidth):0] out,
     #[no_mangle] exceptionFlags: inv &uint<5>            // output [4:0] exceptionFlags
-) __builtin__
+) where
+    Sum: {expWidth + sigWidth}
+__builtin__
 
 /// Returns the intermediate result of multiplication before rounding, as a “raw” deconstructed floating-point value with two extra bits of significand.
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
 /// Module `roundRawFNToRecFN` can be used to round the intermediate result in conformance with the IEEE Standard.
 #[no_mangle]
-entity mulRecFNToRaw<#uint expWidth, #uint sigWidth>(
+entity mulRecFNToRaw<#uint expWidth, #uint sigWidth, #uint Sum, #uint ExpWidthPlus2, #uint SigWidthPlus3>(
     #[no_mangle] control: uint<1>,                           // input [(`floatControlWidth - 1):0] control,
-    #[no_mangle] a: uint<{expWidth + sigWidth}>,             // input [(expWidth + sigWidth):0] a,
-    #[no_mangle] b: uint<{expWidth + sigWidth}>,             // input [(expWidth + sigWidth):0] b,
+    #[no_mangle] a: uint<Sum>,                               // input [(expWidth + sigWidth):0] a,
+    #[no_mangle] b: uint<Sum>,                               // input [(expWidth + sigWidth):0] b,
     #[no_mangle] invalidExc: inv &bool,                      // output invalidExc,
     #[no_mangle] out_isNaN: inv &bool,                       // output out_isNaN,
     #[no_mangle] out_isInf: inv &bool,                       // output out_isInf,
     #[no_mangle] out_isZero: inv &bool,                      // output out_isZero,
     #[no_mangle] out_sign: inv &bool,                        // output out_sign,
-    #[no_mangle] out_sExp: inv &int<{expWidth + 2}>,         // output signed [(expWidth + 1):0] out_sExp,
-    #[no_mangle] out_sig: inv &uint<{sigWidth + 3}>          // output [(sigWidth + 2):0] out_sig
-) __builtin__
+    #[no_mangle] out_sExp: inv &int<ExpWidthPlus2>,          // output signed [(expWidth + 1):0] out_sExp,
+    #[no_mangle] out_sig: inv &uint<SigWidthPlus3>           // output [(sigWidth + 2):0] out_sig
+) where
+    Sum: {expWidth + sigWidth},
+    ExpWidthPlus2: {expWidth + 2},
+    SigWidthPlus3: {sigWidth + 3}
+__builtin__
 
 /// Implements fused multiply-add as defined by the IEEE Floating-Point Standard.
 /// When `op` = 0, the module computes (`a × b`) + `c` with a single rounding.
@@ -148,33 +176,39 @@ entity mulRecFNToRaw<#uint expWidth, #uint sigWidth>(
 ///
 /// In all cases, the function is computed with only a single rounding, of course.
 #[no_mangle]
-entity mulAddRecFN<#uint expWidth, #uint sigWidth>(
+entity mulAddRecFN<#uint expWidth, #uint sigWidth, #uint Sum>(
     #[no_mangle] control: uint<1>,                       // input [(`floatControlWidth - 1):0] control,
     #[no_mangle] op: uint<2>,                            // input [1:0] op,
-    #[no_mangle] a: uint<{expWidth + sigWidth}>,         // input [(expWidth + sigWidth):0] a,
-    #[no_mangle] b: uint<{expWidth + sigWidth}>,         // input [(expWidth + sigWidth):0] b,
-    #[no_mangle] c: uint<{expWidth + sigWidth}>,         // input [(expWidth + sigWidth):0] c,
+    #[no_mangle] a: uint<Sum>,                           // input [(expWidth + sigWidth):0] a,
+    #[no_mangle] b: uint<Sum>,                           // input [(expWidth + sigWidth):0] b,
+    #[no_mangle] c: uint<Sum>,                           // input [(expWidth + sigWidth):0] c,
     #[no_mangle] roundingMode: uint<3>,                  // input [2:0] roundingMode,
-    #[no_mangle] out: inv &uint<{expWidth + sigWidth}>,  // output [(expWidth + sigWidth):0] out,
+    #[no_mangle] out: inv &uint<Sum>,                    // output [(expWidth + sigWidth):0] out,
     #[no_mangle] exceptionFlags: inv &uint<5>            // output [4:0] exceptionFlags
-) __builtin__
+) where
+    Sum: {expWidth + sigWidth}
+__builtin__
 
 /// Returns the intermediate result of the fused multiply-add before rounding, as a “raw” deconstructed floating-point value with two extra bits of significand.
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
 /// Module `roundRawFNToRecFN` can be used to round the intermediate result in conformance with the IEEE Standard.
 #[no_mangle]
-entity mulAddRecFNToRaw<#uint expWidth, #uint sigWidth>(
+entity mulAddRecFNToRaw<#uint expWidth, #uint sigWidth, #uint Sum, #uint ExpWidthPlus2, #uint SigWidthPlus3>(
     #[no_mangle] control: uint<1>,                           // input [(`floatControlWidth - 1):0] control,
     #[no_mangle] op: uint<2>,                                // input [1:0] op,
-    #[no_mangle] a: uint<{expWidth + sigWidth}>,             // input [(expWidth + sigWidth):0] a,
-    #[no_mangle] b: uint<{expWidth + sigWidth}>,             // input [(expWidth + sigWidth):0] b,
-    #[no_mangle] c: uint<{expWidth + sigWidth}>,             // input [(expWidth + sigWidth):0] c,
+    #[no_mangle] a: uint<Sum>,                               // input [(expWidth + sigWidth):0] a,
+    #[no_mangle] b: uint<Sum>,                               // input [(expWidth + sigWidth):0] b,
+    #[no_mangle] c: uint<Sum>,                               // input [(expWidth + sigWidth):0] c,
     #[no_mangle] roundingMode: uint<3>,                      // input [2:0] roundingMode,
     #[no_mangle] invalidExc: inv &bool,                      // output invalidExc,
     #[no_mangle] out_isNaN: inv &bool,                       // output out_isNaN,
     #[no_mangle] out_isInf: inv &bool,                       // output out_isInf,
     #[no_mangle] out_isZero: inv &bool,                      // output out_isZero,
     #[no_mangle] out_sign: inv &bool,                        // output out_sign,
-    #[no_mangle] out_sExp: inv &int<{expWidth + 2}>,         // output signed [(expWidth + 1):0] out_sExp,
-    #[no_mangle] out_sig: inv &uint<{sigWidth + 3}>          // output [(sigWidth + 2):0] out_sig
-) __builtin__
+    #[no_mangle] out_sExp: inv &int<ExpWidthPlus2>,          // output signed [(expWidth + 1):0] out_sExp,
+    #[no_mangle] out_sig: inv &uint<SigWidthPlus3>           // output [(sigWidth + 2):0] out_sig
+) where
+    Sum: {expWidth + sigWidth},
+    ExpWidthPlus2: {expWidth + 2},
+    SigWidthPlus3: {sigWidth + 3}
+__builtin__
