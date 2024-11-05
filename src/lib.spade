@@ -1,0 +1,8 @@
+use std::ports;
+
+entity test() -> uint<32> {
+    let out = inst new_mut_wire();
+    let exception_flags = inst new_mut_wire();
+    let _ = inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 23>(0, false, 4, 0, out, exception_flags);
+    inst ports::read_mut_wire(out)
+}
