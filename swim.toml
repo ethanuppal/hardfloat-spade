@@ -10,7 +10,7 @@ source = ["src/hardfloat/*.v", "src/hardfloat/*.vi"]
 include = ["src/hardfloat/", "src/hardfloat/RISCV"]
 
 [compiler]
-git = "git@gitlab.com:ethanuppal/spade.git"
+git = "https://gitlab.com/ethanuppal/spade.git"
 commit = "888d2e9b4101335e199fb9aff6a9539958f2783d"
 
 [simulation]
