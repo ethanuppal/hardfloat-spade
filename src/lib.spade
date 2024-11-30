@@ -2,3 +2,49 @@
 // hardfloat-spade is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 // hardfloat-spade is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 // You should have received a copy of the GNU Lesser General Public License along with hardfloat-spade. If not, see <https://www.gnu.org/licenses/>.
+
+//! Fully-conformant IEEE 754 floating-point API.
+
+use std::ports;
+
+/// `MantissaWidth` should include the implicit leading `1`.
+struct IEEEFloat<#uint ExponentWidth, #uint MantissaWidth> {
+    recoded_bits: uint<{ExponentWidth + MantissaWidth + 1}>
+}
+
+// TODO: need to support non-`self` methods in `impl` blocks
+entity ieee_float_from_int<#uint ExponentWidth, #uint MantissaWidth>(
+    value: uint<{ExponentWidth + MantissaWidth}>
+) -> IEEEFloat<ExponentWidth, MantissaWidth> {
+    let recoded_out = inst ports::new_mut_wire();
+    // should use ot propogate result
+    let exception_flags = inst ports::new_mut_wire();
+    let _ = inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
+        0, 
+        false, 
+        value, 
+        0, 
+        recoded_out, 
+        exception_flags
+    );
+    IEEEFloat$(
+        recoded_bits: inst ports::read_mut_wire(recoded_out)
+    )
+}
+
+// TODO: need to figure out why this doesn't work
+
+//entity ieee_float_value<#uint ExponentWidth, #uint MantissaWidth>(
+//    float: IEEEFloat<ExponentWidth, MantissaWidth>
+//) -> uint<{ExponentWidth + MantissaWidth}> {
+//    let value_out = inst ports::new_mut_wire();
+//    let _ = inst hardfloat::hardfloat_sys::recFNToFN::<
+//        ExponentWidth, MantissaWidth
+//    >(
+//        float.recoded_bits, 
+//        value_out
+//    );
+//    inst ports::read_mut_wire(value_out)
+//}
+
+// type IEEEFloat32 = IEEEFloat<8, 24>;
