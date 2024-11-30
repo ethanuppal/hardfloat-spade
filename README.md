@@ -4,6 +4,8 @@
 
 [Spade](https://spade-lang.org) wrappers for the [Berkley Hardfloat](https://github.com/ucb-bar/berkeley-hardfloat) floating-point library.
 
+I had to hack Spade (in [!360](https://gitlab.com/spade-lang/spade/-/merge_requests/360) and [!362](https://gitlab.com/spade-lang/spade/-/merge_requests/362)) to add the language features needed to support this library.
+
 ## What's in this library?
 
 This library exposes two levels of abstraction over Hardfloat:
