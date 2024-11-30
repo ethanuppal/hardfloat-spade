@@ -6,8 +6,8 @@
 #
 
 HARDFLOAT_DIR="src/hardfloat/"
-HARDFLOAT_URL="http://www.jhauser.us/arithmetic/HardFloat-1.zip"
-ZIP_FILE="HardFloat-1.zip"
+HARDFLOAT_URL="https://github.com/ethanuppal/berkeley-hardfloat/archive/refs/heads/main.zip"
+ZIP_FILE="main.zip"
 
 rm -rf "${HARDFLOAT_DIR}"
 mkdir -p "${HARDFLOAT_DIR}"
@@ -19,7 +19,7 @@ if [ -f "$ZIP_FILE" ]; then
 
     unzip "$ZIP_FILE" -d "$TEMP_DIR"
 
-    mv "$TEMP_DIR/HardFloat-1/source"/* "${HARDFLOAT_DIR}"
+    mv "$TEMP_DIR/berkeley-hardfloat-main/extract"/* "${HARDFLOAT_DIR}"
 
     rm -rf "$TEMP_DIR"
     rm "$ZIP_FILE"
@@ -27,6 +27,7 @@ if [ -f "$ZIP_FILE" ]; then
     echo "HardFloat library source files fetched and extracted to ${HARDFLOAT_DIR}"
 else
     echo "Failed to download HardFloat library from ${HARDFLOAT_URL}"
+    exit 1
 fi
 
 echo "Copyright 2019 The Regents of the University of California. All rights reserved.

@@ -2,3 +2,25 @@
 // hardfloat-spade is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 // hardfloat-spade is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 // You should have received a copy of the GNU Lesser General Public License along with hardfloat-spade. If not, see <https://www.gnu.org/licenses/>.
+
+use std::ports;
+
+entity uint32_to_float32(input: uint<32>) -> uint<32> {
+    let recoded_out = inst new_mut_wire();
+    let exception_flags = inst new_mut_wire();
+    let _ = inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
+        0, 
+        false, 
+        input, 
+        0, 
+        recoded_out, 
+        exception_flags
+    );
+    let recoded_bits: uint<33> = inst ports::read_mut_wire(recoded_out);
+    let float_out = inst new_mut_wire();
+    let _ = inst hardfloat::hardfloat_sys::recFNToFN::<8, 24>(
+        recoded_bits, 
+        float_out
+    );
+    inst ports::read_mut_wire(float_out)
+}
