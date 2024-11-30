@@ -11,7 +11,7 @@ include = ["src/hardfloat/", "src/hardfloat/RISCV"]
 
 [compiler]
 git = "https://gitlab.com/ethanuppal/spade.git"
-commit = "888d2e9b4101335e199fb9aff6a9539958f2783d"
+commit = "392f5e3d6aa9b1b2102b872bb73bcba7d02e9128"
 
 [simulation]
 testbench_dir = "test"
