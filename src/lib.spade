@@ -1,8 +1,27 @@
 use std::ports;
 
-entity test() -> uint<32> {
-    let out = inst new_mut_wire();
+entity uint32_to_float32(input: uint<32>) -> uint<32> {
+    let recoded_out = inst new_mut_wire();
     let exception_flags = inst new_mut_wire();
-    let _ = inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 23>(0, false, 4, 0, out, exception_flags);
-    inst ports::read_mut_wire(out)
+    let _ = inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
+        0, 
+        false, 
+        input, 
+        0, 
+        recoded_out, 
+        exception_flags
+    );
+    let recoded_bits: uint<33> = inst ports::read_mut_wire(recoded_out);
+    let float_out = inst new_mut_wire();
+    let _ = inst hardfloat::hardfloat_sys::recFNToFN::<8, 24>(
+        recoded_bits, 
+        float_out
+    );
+    inst ports::read_mut_wire(float_out)
+}
+
+#[no_mangle]
+entity test(input: uint<32>) -> uint<32> {
+    //inst uint32_to_float32(input)
+    input
 }

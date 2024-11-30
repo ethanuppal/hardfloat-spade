@@ -4,7 +4,6 @@ name = "hardfloat"
 
 # get berkley hardfloat
 preprocessing = ["chmod +x ./get_hardfloat.sh", "./get_hardfloat.sh"]
-# extra_verilog = ["src/hardfloat/*.v", "src/hardfloat/*.vi"]
 
 [verilog]
 source = ["src/hardfloat/*.v", "src/hardfloat/*.vi"]

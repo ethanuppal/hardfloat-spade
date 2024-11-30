@@ -1,0 +1,26 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-14]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Rust caching
+        uses: Swatinem/rust-cache@v2.7.3
+
+      - name: Setup environment
+        run: $(which python3 || which python) setup/driver.py
+
+      - name: Run tests
+        run: swim test
