@@ -6,7 +6,7 @@
 #
 
 HARDFLOAT_DIR="src/hardfloat/"
-HARDFLOAT_URL="https://github.com/ethanuppal/berkeley-hardfloat/archive/refs/heads/main.zip"
+HARDFLOAT_URL="https://github.com/ethanuppal/berkeley-hardfloat/archive/refs/tags/v0.1.0.zip"
 ZIP_FILE="main.zip"
 
 rm -rf "${HARDFLOAT_DIR}"
