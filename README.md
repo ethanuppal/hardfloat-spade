@@ -100,7 +100,7 @@ async def test(dut):
 ```
 
 If you run `swim test`, it will pass!
-(You have to use my custom `swim` on my GitLab as of writing this.)
+(You have to use [my custom `swim`](https://gitlab.com/ethanuppal/swim/-/commit/9ea23fe92b1623f6f3a3e2f81f499650d68a09d8) on my GitLab as of writing this.)
 
 ### `hardfloat`
 
