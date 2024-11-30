@@ -1,0 +1,27 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest] #, macos-14]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: Swatinem/rust-cache@v2.7.3
+
+      - name: Setup environment
+        run: $(which python3 || which python) setup/driver.py
+
+      - name: Install swim
+        run: cargo install --git https://gitlab.com/ethanuppal/swim.git --rev 9ea23fe92b1623f6f3a3e2f81f499650d68a09d8
+
+      - name: Run tests
+        run: swim test
