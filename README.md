@@ -1,6 +1,44 @@
 # hardfloat-spade
 
+![CI](https://github.com/ethanuppal/hardfloat-spade/actions/workflows/ci.yaml/badge.svg)
+
 [Spade](https://spade-lang.org) wrappers for the [Berkley Hardfloat](https://github.com/ucb-bar/berkeley-hardfloat) floating-point library.
+
+## What's in this library?
+
+This library exposes two levels of abstraction over Hardfloat:
+
+### `hardfloat-sys`
+
+`hardfloat-sys` provides raw bindings to the Hardfloat Verilog.
+For instance, here's how you would convert a two's complement `uint<32>` to a
+IEEE 32-bit floating point `uint<32>`:
+
+```rs
+use std::ports;
+
+entity uint32_to_float32(input: uint<32>) -> uint<32> {
+    let recoded_out = inst new_mut_wire();
+    let exception_flags = inst new_mut_wire();
+    let _ = inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
+        0, 
+        false, 
+        input, 
+        0, 
+        recoded_out, 
+        exception_flags
+    );
+    let recoded_bits: uint<33> = inst ports::read_mut_wire(recoded_out);
+    let float_out = inst new_mut_wire();
+    let _ = inst hardfloat::hardfloat_sys::recFNToFN::<8, 24>(
+        recoded_bits, 
+        float_out
+    );
+    inst ports::read_mut_wire(float_out)
+}
+```
+
+### `hardfloat`
 
 ## License
 
