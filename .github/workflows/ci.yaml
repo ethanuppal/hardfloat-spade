@@ -22,5 +22,8 @@ jobs:
       - name: Setup environment
         run: $(which python3 || which python) setup/driver.py
 
+      - name: Install swim
+        run: cargo install --git https://gitlab.com/ethanuppal/swim.git --rev 669932fe1bf75fecf0f53d2ca63bde72bcece57d
+
       - name: Run tests
         run: swim test

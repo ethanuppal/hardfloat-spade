@@ -5,4 +5,3 @@ brew update
 brew install zig
 brew install icarus-verilog
 brew install verilator
-cargo install --git https://gitlab.com/spade-lang/swim
