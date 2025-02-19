@@ -4,7 +4,11 @@
 
 [Spade](https://spade-lang.org) wrappers for the [Berkley Hardfloat](https://github.com/ucb-bar/berkeley-hardfloat) floating-point library, powered by my [custom downstream patches](https://github.com/ethanuppal/berkeley-hardfloat).
 
-I had to hack Spade (in [!360](https://gitlab.com/spade-lang/spade/-/merge_requests/360) and [!362](https://gitlab.com/spade-lang/spade/-/merge_requests/362)) to add the language features needed to support this library.
+> [!IMPORTANT]
+>
+> > I had to hack Spade (in [!360](https://gitlab.com/spade-lang/spade/-/merge_requests/360) and [!362](https://gitlab.com/spade-lang/spade/-/merge_requests/362)) to add the language features needed to support this library.
+>
+> 🎉 Spade@eeecd521^ and Swim@6d55f8d7^ can now build this library with my PRs!
 
 ## What's in this library?
 
@@ -18,33 +22,31 @@ IEEE 32-bit floating point `uint<32>` (it was Berkeley's decision to
 use camel case, don't @ me):
 
 ```rs
-use std::ports;
-
 entity uint32_to_float32(input: uint<32>) -> uint<32> {
-    let recoded_out = inst new_mut_wire();
-    let exception_flags = inst new_mut_wire();
+    let (recoded_out, recoded_out_inv) = port;
+    let (exception_flags, exception_flags_inv) = port;
 
     // int -> recoded
-    let _ = inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
+    inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
         0, // control bit(s)
-        true, // whether inpt is signed 
+        true, // whether input is signed 
         input, // actual integer value to convert
         0, // rounding mode
-        recoded_out,  // output floating point
-        exception_flags // errors that occured in conversion
+        recoded_out_inv,  // output floating point
+        exception_flags_inv // errors that occured in conversion
     );
 
     // recoded 32-bit float is 33 bits
     let recoded_bits: uint<33> = inst ports::read_mut_wire(recoded_out);
-    let float_out = inst new_mut_wire();
+    let (float_out, float_out_inv) = port;
 
     // recoded -> ieee
-    let _ = inst hardfloat::hardfloat_sys::recFNToFN::<8, 24>(
-        recoded_bits, // recoded representation
+    inst hardfloat::hardfloat_sys::recFNToFN::<8, 24>(
+        *recoded_out, // recoded representation
         float_out // ieee representation
     );
 
-    inst ports::read_mut_wire(float_out)
+    *float_out
 }
 ```
 
@@ -59,10 +61,8 @@ To do so, we'll use `hardfloat_sys::iNToRecFN`.
 - The output is a (presumably big endian) representation of the floating-point number best approximating `input`.
 
 Since `hardfloat-sys` exposes Verilog entities, we're going to have to use
-`std::ports` to construct `inv &` wires (which are kind of like Verilog's
+the `port` keyword to construct `inv &` wires (which are kind of like Verilog's
 `output` ports).
-(Yes, I'm aware I don't use the fancy new `port` features here; it's something
-I'll fix later.)
 
 Hardfloat works with an internal "recoded" representation that is one more bit
 than the standard IEEE representation.
@@ -115,8 +115,8 @@ However, you can view the beginnings at [`src/lib.spade`](./src/lib.spade).
 code I have written. The license for Hardfloat is reproduced when the source
 files are downloaded.)
 
-hardfloat-spade is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+hardfloat-spade is licensed under the Mozilla Public License 2.0. 
+This license is similar to the Lesser GNU Public License, except that the copyleft applies only to the source code of this library, not any library that uses it.
+That means you can statically or dynamically link with unfree code (see https://www.mozilla.org/en-US/MPL/2.0/FAQ/#virality).
 
-hardfloat-spade is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-
-A copy of the GNU Lesser General Public License, version 3, can be found in the [LICENSE](LICENSE) file.
+A copy of the Mozilla Public License, version 2.0, can be found in the [LICENSE](LICENSE) file.

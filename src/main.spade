@@ -1,0 +1,53 @@
+// Copyright (C) 2024 Ethan Uppal.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License,
+// v. 2.0. If a copy of the MPL was not distributed with this file, You can
+// obtain one at https://mozilla.org/MPL/2.0/.
+
+//! Fully-conformant IEEE 754 floating-point API.
+
+mod hardfloat_sys;
+mod hardfloat_sys_test;
+mod main_test;
+
+/// `MantissaWidth` should include the implicit leading `1`.
+//struct IEEEFloat<#uint ExponentWidth, #uint MantissaWidth> {
+//    recoded_bits: uint<{ExponentWidth + MantissaWidth + 1}>
+//}
+
+// TODO: need to support non-`self` methods in `impl` blocks
+//entity ieee_float_from_int<#uint ExponentWidth, #uint MantissaWidth>(
+//    value: uint<{ExponentWidth + MantissaWidth}>
+//) -> IEEEFloat<ExponentWidth, MantissaWidth> {
+//    let recoded_out = inst ports::new_mut_wire();
+//    // should use to propogate result
+//    let exception_flags = inst ports::new_mut_wire();
+//    inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
+//        0, 
+//        false,
+//        value, 
+//        0, 
+//        recoded_out, 
+//        exception_flags
+//    ); // see lixou!
+//    IEEEFloat$(
+//        recoded_bits: recoded_out
+//    )
+//}
+
+// TODO: need to figure out why this doesn't work
+
+//entity ieee_float_value<#uint ExponentWidth, #uint MantissaWidth>(
+//    float: IEEEFloat<ExponentWidth, MantissaWidth>
+//) -> uint<{ExponentWidth + MantissaWidth}> {
+//    let value_out = inst ports::new_mut_wire();
+//    let _ = inst hardfloat::hardfloat_sys::recFNToFN::<
+//        ExponentWidth, MantissaWidth
+//    >(
+//        float.recoded_bits, 
+//        value_out
+//    );wget https://github.com/ethanuppal/berkeley-hardfloat/archive/refs/tags/v0.1.0.zip
+//    inst ports::read_mut_wire(value_out)
+//}
+
+// type IEEEFloat32 = IEEEFloat<8, 24>;

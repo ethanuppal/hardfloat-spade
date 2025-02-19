@@ -6,7 +6,7 @@
 #
 
 PATCHES_VERSION="0.1.0"
-HARDFLOAT_DIR="src/hardfloat/"
+HARDFLOAT_DIR="verilog/hardfloat/"
 HARDFLOAT_URL="https://github.com/ethanuppal/berkeley-hardfloat/archive/refs/tags/v$PATCHES_VERSION.zip"
 ZIP_FILE="v$PATCHES_VERSION.zip"
 ZIP_SUBFOLDER="berkeley-hardfloat-$PATCHES_VERSION/extract"

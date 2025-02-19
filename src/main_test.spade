@@ -1,0 +1,12 @@
+// Copyright (C) 2024 Ethan Uppal.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License,
+// v. 2.0. If a copy of the MPL was not distributed with this file, You can
+// obtain one at https://mozilla.org/MPL/2.0/.
+
+use std::ports;
+
+//entity uint32_to_float32_but_nice(input: uint<32>) -> uint<32> {
+//    let float: lib::hardfloat::IEEEFloat<8, 24> = lib::ieee_float_from_int(input);
+//    float.value()
+//}

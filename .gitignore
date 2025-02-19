@@ -5,3 +5,5 @@ src/hardfloat/
 lib/
 pyvenv.cfg
 bin/
+target/
+verilog/
