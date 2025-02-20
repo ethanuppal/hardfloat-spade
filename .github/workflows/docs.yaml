@@ -1,0 +1,37 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+env:
+  CARGO_TERM_COLOR: always
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: Swatinem/rust-cache@v2
+
+    - name: Install Swim
+      run: cargo install --locked --git https://gitlab.com/ethanuppal/swim --rev 63189fa1f6ce8a4cbd2b1ea6cd6dea938c70dacc # swim doc
+
+    - name: Install spadedoc
+      run: |
+        git clone https://gitlab.com/DasLixou/spadedoc
+        cd spadedoc
+        git submodule update --init --recursive
+        cargo install --path .
+    
+    - name: Generate documentation
+      run: swim doc
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/doc
