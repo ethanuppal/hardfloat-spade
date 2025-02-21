@@ -6,13 +6,5 @@ name = "hardfloat"
 preprocessing = ["chmod +x ./get_hardfloat.sh", "./get_hardfloat.sh"]
 
 [verilog]
-source = ["src/hardfloat/*.v", "src/hardfloat/*.vi"]
-include = ["src/hardfloat/", "src/hardfloat/RISCV"]
-
-[compiler]
-git = "https://gitlab.com/ethanuppal/spade.git"
-commit = "1640ea90bbba0a57b51122474b7df879912e5b0b"
-
-[simulation]
-testbench_dir = "test"
-simulator = "icarus"
+sources = ["verilog/hardfloat/*.v", "verilog/hardfloat/*.vi"]
+include = ["verilog/hardfloat/", "verilog/hardfloat/RISCV"]

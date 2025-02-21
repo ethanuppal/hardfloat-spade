@@ -4,7 +4,11 @@
 
 [Spade](https://spade-lang.org) wrappers for the [Berkley Hardfloat](https://github.com/ucb-bar/berkeley-hardfloat) floating-point library, powered by my [custom downstream patches](https://github.com/ethanuppal/berkeley-hardfloat).
 
-I had to hack Spade (in [!360](https://gitlab.com/spade-lang/spade/-/merge_requests/360) and [!362](https://gitlab.com/spade-lang/spade/-/merge_requests/362)) to add the language features needed to support this library.
+> [!IMPORTANT]
+>
+> > I had to hack Spade (in [!360](https://gitlab.com/spade-lang/spade/-/merge_requests/360) and [!362](https://gitlab.com/spade-lang/spade/-/merge_requests/362)) to add the language features needed to support this library.
+>
+> 🎉 Spade@eeecd521^ and Swim@6d55f8d7^ can now build this library with my PRs!
 
 ## What's in this library?
 
@@ -18,33 +22,31 @@ IEEE 32-bit floating point `uint<32>` (it was Berkeley's decision to
 use camel case, don't @ me):
 
 ```rs
-use std::ports;
-
-entity uint32_to_float32(input: uint<32>) -> uint<32> {
-    let recoded_out = inst new_mut_wire();
-    let exception_flags = inst new_mut_wire();
+entity uint32_to_float32(int_to_convert: uint<32>) -> uint<32> {
+    let (recoded_out, recoded_out_inv) = port;
+    let (exception_flags, exception_flags_inv) = port;
 
     // int -> recoded
-    let _ = inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
+    inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
         0, // control bit(s)
-        true, // whether inpt is signed 
-        input, // actual integer value to convert
+        true, // whether input is signed 
+        int_to_convert, // actual integer value to convert
         0, // rounding mode
-        recoded_out,  // output floating point
-        exception_flags // errors that occured in conversion
+        recoded_out_inv,  // output floating point
+        exception_flags_inv // errors that occured in conversion
     );
 
     // recoded 32-bit float is 33 bits
     let recoded_bits: uint<33> = inst ports::read_mut_wire(recoded_out);
-    let float_out = inst new_mut_wire();
+    let (float_out, float_out_inv) = port;
 
     // recoded -> ieee
-    let _ = inst hardfloat::hardfloat_sys::recFNToFN::<8, 24>(
-        recoded_bits, // recoded representation
+    inst hardfloat::hardfloat_sys::recFNToFN::<8, 24>(
+        *recoded_out, // recoded representation
         float_out // ieee representation
     );
 
-    inst ports::read_mut_wire(float_out)
+    *float_out
 }
 ```
 
@@ -59,55 +61,67 @@ To do so, we'll use `hardfloat_sys::iNToRecFN`.
 - The output is a (presumably big endian) representation of the floating-point number best approximating `input`.
 
 Since `hardfloat-sys` exposes Verilog entities, we're going to have to use
-`std::ports` to construct `inv &` wires (which are kind of like Verilog's
+the `port` keyword to construct `inv &` wires (which are kind of like Verilog's
 `output` ports).
-(Yes, I'm aware I don't use the fancy new `port` features here; it's something
-I'll fix later.)
 
 Hardfloat works with an internal "recoded" representation that is one more bit
 than the standard IEEE representation.
 We can restore the IEEE representation using `hardfloat_sys::recFNToFN`.
 
 And that's it!
-We can test this using `cocotb`:
+We can test this entity in Rust using [marlin](https://github.com/ethanuppal/marlin):
 
 ```python
-# top = hardfloat_sys_test::uint32_to_float32
+use marlin::{spade::prelude::*, verilator::VerilatorRuntimeOptions};
+use rand::Rng;
+use snafu::Whatever;
 
-import random
-import struct
-from spade import SpadeExt
-from cocotb.triggers import Timer
-from cocotb import cocotb
+#[spade(src = "src/hardfloat_sys_test.spade", name = "uint32_to_float32")]
+struct UInt32ToFloat32;
 
-def float32_to_bits(f):
-    return format(struct.unpack("!I", struct.pack("!f", f))[0], "032b")
+#[test]
+#[snafu::report]
+fn main() -> Result<(), Whatever> {
+    colog::init();
 
-async def convert(s, value):
-    s.i.input = value
-    await Timer(10, units="ps")
-    return s.o
+    let mut runtime = SpadeRuntime::new(
+        SpadeRuntimeOptions {
+            verilator_options: VerilatorRuntimeOptions {
+                // hardfloat has these warnings
+                ignored_warnings: vec!["WIDTHTRUNC".into(), "WIDTHEXPAND".into()],
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        true,
+    )?;
 
-@cocotb.test()
-async def test(dut):
-    s = SpadeExt(dut)
+    let mut uint32_to_float32 = runtime.create_model::<UInt32ToFloat32>()?;
 
-    for _ in range(0, 100):
-        num = random.randint(0, 10000)  # needs to be nonnegative for now
-        print(f"testing that {num} converts correctly")
-        converted = await convert(s, num)
-        converted.assert_eq(int(float32_to_bits(num), 2))
+    let mut rng = rand::rng();
+    for _ in 0..100 {
+        let random_int = rng.random::<u32>();
+        let expected = u32::from_ne_bytes((random_int as f32).to_ne_bytes());
+
+        uint32_to_float32.int_to_convert = u32::from_ne_bytes(random_int.to_ne_bytes());
+        uint32_to_float32.eval();
+        let actual = uint32_to_float32.result;
+
+        assert_eq!(actual, expected, "Casting the integer {} to its nearest floating point representation did not agree with the hardware module", random_int);
+    }
+
+    Ok(())
+}
 ```
 
-If you run `swim test`, it will pass!
-(You have to use [my custom `swim`](https://gitlab.com/ethanuppal/swim/-/commit/9ea23fe92b1623f6f3a3e2f81f499650d68a09d8) on my GitLab as of writing this.)
+If you run `cargo test`, it will pass!
 
 ### `hardfloat`
 
 Currently, only the raw bindings are usable.
 With a bit more hacking in Spade's type system, my envisioned API should be able
 to work.
-However, you can view the beginnings at [`src/lib.spade`](./src/lib.spade).
+However, you can view the beginnings at [`src/main.spade`](./src/main.spade).
 
 ## License
 
@@ -115,8 +129,8 @@ However, you can view the beginnings at [`src/lib.spade`](./src/lib.spade).
 code I have written. The license for Hardfloat is reproduced when the source
 files are downloaded.)
 
-hardfloat-spade is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+hardfloat-spade is licensed under the Mozilla Public License 2.0. 
+This license is similar to the Lesser GNU Public License, except that the copyleft applies only to the source code of this library, not any library that uses it.
+That means you can statically or dynamically link with unfree code (see https://www.mozilla.org/en-US/MPL/2.0/FAQ/#virality).
 
-hardfloat-spade is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
-
-A copy of the GNU Lesser General Public License, version 3, can be found in the [LICENSE](LICENSE) file.
+A copy of the Mozilla Public License, version 2.0, can be found in the [LICENSE](LICENSE) file.
