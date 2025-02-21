@@ -22,7 +22,7 @@ IEEE 32-bit floating point `uint<32>` (it was Berkeley's decision to
 use camel case, don't @ me):
 
 ```rs
-entity uint32_to_float32(input: uint<32>) -> uint<32> {
+entity uint32_to_float32(int_to_convert: uint<32>) -> uint<32> {
     let (recoded_out, recoded_out_inv) = port;
     let (exception_flags, exception_flags_inv) = port;
 
@@ -30,7 +30,7 @@ entity uint32_to_float32(input: uint<32>) -> uint<32> {
     inst hardfloat::hardfloat_sys::iNToRecFN::<32, 8, 24>(
         0, // control bit(s)
         true, // whether input is signed 
-        input, // actual integer value to convert
+        int_to_convert, // actual integer value to convert
         0, // rounding mode
         recoded_out_inv,  // output floating point
         exception_flags_inv // errors that occured in conversion
@@ -69,45 +69,59 @@ than the standard IEEE representation.
 We can restore the IEEE representation using `hardfloat_sys::recFNToFN`.
 
 And that's it!
-We can test this using `cocotb`:
+We can test this entity in Rust using [marlin](https://github.com/ethanuppal/marlin):
 
 ```python
-# top = hardfloat_sys_test::uint32_to_float32
+use marlin::{spade::prelude::*, verilator::VerilatorRuntimeOptions};
+use rand::Rng;
+use snafu::Whatever;
 
-import random
-import struct
-from spade import SpadeExt
-from cocotb.triggers import Timer
-from cocotb import cocotb
+#[spade(src = "src/hardfloat_sys_test.spade", name = "uint32_to_float32")]
+struct UInt32ToFloat32;
 
-def float32_to_bits(f):
-    return format(struct.unpack("!I", struct.pack("!f", f))[0], "032b")
+#[test]
+#[snafu::report]
+fn main() -> Result<(), Whatever> {
+    colog::init();
 
-async def convert(s, value):
-    s.i.input = value
-    await Timer(10, units="ps")
-    return s.o
+    let mut runtime = SpadeRuntime::new(
+        SpadeRuntimeOptions {
+            verilator_options: VerilatorRuntimeOptions {
+                // hardfloat has these warnings
+                ignored_warnings: vec!["WIDTHTRUNC".into(), "WIDTHEXPAND".into()],
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        true,
+    )?;
 
-@cocotb.test()
-async def test(dut):
-    s = SpadeExt(dut)
+    let mut uint32_to_float32 = runtime.create_model::<UInt32ToFloat32>()?;
 
-    for _ in range(0, 100):
-        num = random.randint(0, 10000)  # needs to be nonnegative for now
-        print(f"testing that {num} converts correctly")
-        converted = await convert(s, num)
-        converted.assert_eq(int(float32_to_bits(num), 2))
+    let mut rng = rand::rng();
+    for _ in 0..100 {
+        let random_int = rng.random::<u32>();
+        let expected = u32::from_ne_bytes((random_int as f32).to_ne_bytes());
+
+        uint32_to_float32.int_to_convert = u32::from_ne_bytes(random_int.to_ne_bytes());
+        uint32_to_float32.eval();
+        let actual = uint32_to_float32.result;
+
+        assert_eq!(actual, expected, "Casting the integer {} to its nearest floating point representation did not agree with the hardware module", random_int);
+    }
+
+    Ok(())
+}
 ```
 
-If you run `swim test`, it will pass!
-(You have to use [my custom `swim`](https://gitlab.com/ethanuppal/swim/-/commit/9ea23fe92b1623f6f3a3e2f81f499650d68a09d8) on my GitLab as of writing this.)
+If you run `cargo test`, it will pass!
 
 ### `hardfloat`
 
 Currently, only the raw bindings are usable.
 With a bit more hacking in Spade's type system, my envisioned API should be able
 to work.
-However, you can view the beginnings at [`src/lib.spade`](./src/lib.spade).
+However, you can view the beginnings at [`src/main.spade`](./src/main.spade).
 
 ## License
 

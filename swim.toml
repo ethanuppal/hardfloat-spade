@@ -6,5 +6,5 @@ name = "hardfloat"
 preprocessing = ["chmod +x ./get_hardfloat.sh", "./get_hardfloat.sh"]
 
 [verilog]
-sources = ["src/hardfloat/*.v", "src/hardfloat/*.vi"]
-include = ["src/hardfloat/", "src/hardfloat/RISCV"]
+sources = ["verilog/hardfloat/*.v", "verilog/hardfloat/*.vi"]
+include = ["verilog/hardfloat/", "verilog/hardfloat/RISCV"]

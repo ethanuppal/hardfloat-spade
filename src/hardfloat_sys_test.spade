@@ -5,13 +5,13 @@
 // obtain one at https://mozilla.org/MPL/2.0/.
 
 #[no_mangle(all)]
-entity uint32_to_float32(input: uint<32>, result: inv &uint<32>) {
+entity uint32_to_float32(int_to_convert: uint<32>, result: inv &uint<32>) {
     let (recoded_out, recoded_out_inv) = port;
     let (exception_flags, exception_flags_inv) = port;
     inst lib::hardfloat_sys::iNToRecFN::<32, 8, 24>(
         0, 
         false, 
-        input, 
+        int_to_convert, 
         0, 
         recoded_out_inv, 
         exception_flags_inv
