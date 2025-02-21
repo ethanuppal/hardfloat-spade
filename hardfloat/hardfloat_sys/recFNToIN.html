@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spade Documentation Index</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">recFNToIN</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">hardfloat</span>::<span class="sdoc_path_seg">hardfloat_sys</span>
+</span></p><p>Description taken from Berkeley Hardfloat documentation:</p>
+<p>Converts from a floating-point value in recoded form to an integer type.
+The output named <code>out</code> is an unsigned integer if input <code>signedOut</code> is false, or is a signed integer if <code>signedOut</code> is true.
+As explained earlier in section 7, Exception Results, the 3-bit output named <code>intExceptionFlags</code> reports exceptions invalid, overflow, and inexact.
+Although <code>intExceptionFlags</code> distinguishes integer overflow separately from invalid exceptions, the IEEE Standard does not permit conversions to integer to raise a floating-point overflow exception.
+Instead, if a system has no other way to indicate that a conversion to integer overflowed, the standard requires that the floating-point invalid exception be raised, not floating-point overflow.
+Hence, the invalid and overflow bits from <code>intExceptionFlags</code> will typically be ORed together to contribute to the usual floating-point invalid exception.</p>
+</body>
+
+</html>

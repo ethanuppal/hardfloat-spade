@@ -1,0 +1,84 @@
+@font-face {
+    font-family: "DM Sans";
+    src: url("DMSans-VariableFont_opsz,wght.ttf");
+}
+
+.sdoc_badge {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    border-radius: 11px;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 11pt;
+}
+
+.sdoc_badge_module {
+    background-color: #6fb5e3;
+}
+
+.sdoc_badge_function {
+    background-color: #9b70b8;
+}
+
+.sdoc_badge_entity {
+    background-color: #FF9EAA;
+}
+
+.sdoc_badge_pipeline {
+    background-color: #77ddb6;
+}
+
+.sdoc_badge_struct {
+    background-color: #FFDB5C;
+}
+
+.sdoc_badge_enum {
+    background-color: #c7e478;
+}
+
+.sdoc_badge_primitive {
+    background-color: #ff8750;
+}
+
+.sdoc_badge_trait {
+    background-color: #db5dd1;
+}
+
+.sdoc_name {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 30pt;
+}
+
+.sdoc_path {
+    margin-top: 0px;
+    color: #555555;
+}
+
+.sdoc_path_whole {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+}
+
+.sdoc_path_seg {}
+
+.sdoc_item_listing_title {
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    font-family: "DM Sans", sans-serif;
+    font-size: 16pt;
+    margin: 25px 0 15px 0;
+    display: block;
+    padding: 3px 0 9px 0;
+}
+
+.clean_ul {
+    list-style-type: none;
+}
+
+.sdoc_item_listed {
+    font-family: "DM Sans", sans-serif;
+}

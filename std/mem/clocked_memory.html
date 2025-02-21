@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spade Documentation Index</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">clocked_memory</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">mem</span>
+</span></p><p>Define a memory where values are written on the rising edge of the clock.
+Reads can occur asynchronously with the <code>read_mem</code> function. If Clocked reads
+should be used, the read result should be placed in a register</p>
+<p>The write array defines all the write ports to the memory. It consists of a
+<code>write enable</code>, <code>address</code> and <code>data</code> field. When WE is enabled, data is written
+to address. Otherwise no change takes effect
+NOTE: We when possible, we should make compute AddrWidth from NumElements</p>
+</body>
+
+</html>
