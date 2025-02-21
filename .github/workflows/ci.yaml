@@ -21,7 +21,15 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2.7.3
 
-      - name: Install swim
+      - name: Install Verilator
+        run: |
+          if [[ "$(uname)" == 'Darwin' ]]; then
+            brew install verilator
+          else
+            sudo apt-get install -y verilator
+          fi
+
+      - name: Install Swim
         run: cargo install --git https://gitlab.com/spade-lang/swim.git --rev 9871f3ab4fb64e78947be12622b066136bf42b91
 
       - name: Run Marlin tests
