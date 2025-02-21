@@ -1,6 +1,10 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    branches:
+      - main
 
 env:
   CARGO_TERM_COLOR: always
@@ -10,18 +14,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest] #, macos-14]
+        os: [ubuntu-latest, macos-15]
 
     steps:
       - uses: actions/checkout@v2
 
       - uses: Swatinem/rust-cache@v2.7.3
 
-      - name: Setup environment
-        run: $(which python3 || which python) setup/driver.py
-
       - name: Install swim
-        run: cargo install --git https://gitlab.com/ethanuppal/swim.git --rev 9ea23fe92b1623f6f3a3e2f81f499650d68a09d8
+        run: cargo install --git https://gitlab.com/spade-lang/swim.git --rev 9871f3ab4fb64e78947be12622b066136bf42b91
 
       - name: Run Marlin tests
         run: |
