@@ -23,5 +23,7 @@ jobs:
       - name: Install swim
         run: cargo install --git https://gitlab.com/ethanuppal/swim.git --rev 9ea23fe92b1623f6f3a3e2f81f499650d68a09d8
 
-      - name: Run tests
-        run: swim test
+      - name: Run Marlin tests
+        run: |
+          swim build
+          cargo test

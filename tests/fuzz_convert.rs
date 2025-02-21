@@ -10,17 +10,16 @@ struct UInt32ToFloat32;
 fn main() -> Result<(), Whatever> {
     colog::init();
 
-    let mut runtime = SpadeRuntime::new(
-        SpadeRuntimeOptions {
-            verilator_options: VerilatorRuntimeOptions {
-                // hardfloat has these warnings
-                ignored_warnings: vec!["WIDTHTRUNC".into(), "WIDTHEXPAND".into()],
-                ..Default::default()
-            },
+    let mut runtime = SpadeRuntime::new(SpadeRuntimeOptions {
+        call_swim_build: false,
+        verilator_options: VerilatorRuntimeOptions {
+            log: true,
+            // hardfloat has these warnings
+            ignored_warnings: vec!["WIDTHTRUNC".into(), "WIDTHEXPAND".into()],
             ..Default::default()
         },
-        true,
-    )?;
+        ..Default::default()
+    })?;
 
     let mut uint32_to_float32 = runtime.create_model::<UInt32ToFloat32>()?;
 
