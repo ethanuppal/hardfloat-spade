@@ -6,11 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spade Documentation Index</title>
     <link rel="stylesheet" href="../../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../../spade-theme.css">
+    <script>hljs.highlightAll();</script>
 </head>
 
-<body><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">fifo</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">mem</span>
-</span></p><p>A cross-domain fifo backed by block RAM.
+<body>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">fifo</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">mem</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">entity fifo&#60;
+    #uint AddrWidth,
+    Data,
+    #uint NumElements
+&#62;(
+    write_clk: clock,
+    write_rst: bool,
+    read_clk: clock,
+    read_rst: bool
+) -&#62; (FifoWrite&#38;#60;Data&#38;#62;, FifoRead&#38;#60;AddrWidth, Data&#38;#62;);</code></pre><p>A cross-domain fifo backed by block RAM.
 NOTE: W <em>must</em> be 2^C but this is not currently checked</p>
+</div>
 </body>
 
 </html>

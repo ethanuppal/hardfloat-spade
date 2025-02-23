@@ -6,11 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spade Documentation Index</title>
     <link rel="stylesheet" href="../../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../../spade-theme.css">
+    <script>hljs.highlightAll();</script>
 </head>
 
-<body><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">clocked_memory_init</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">mem</span>
-</span></p><p>Same as <code>clocked_memory</code> but initializes the memory with the values specified in <code>initial_values</code>.
+<body>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">clocked_memory_init</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">mem</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">extern entity clocked_memory_init&#60;
+    #uint NumElements,
+    #uint WritePorts,
+    #uint AddrWidth,
+    D
+&#62;(
+    clk: clock,
+    writes: [(bool, uint&#38;#60;AddrWidth&#38;#62;, D); WritePorts],
+    initial_values: [D; NumElements]
+) -&#62; Memory&#60;D, NumElements&#62;;</code></pre><p>Same as <code>clocked_memory</code> but initializes the memory with the values specified in <code>initial_values</code>.
 The initial values must be evaluatable at compile time, otherwise an error is thrown</p>
+</div>
 </body>
 
 </html>

@@ -6,13 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spade Documentation Index</title>
     <link rel="stylesheet" href="../../../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../../../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../../../spade-theme.css">
+    <script>hljs.highlightAll();</script>
 </head>
 
-<body><span class="sdoc_badge sdoc_badge_function">Function</span><h1 class="sdoc_name">to_bits</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">conv</span>::<span class="sdoc_path_seg">impl_1</span>
-</span></p><p>Interpret a uint as the raw bit values. output[0] is the LSB of the integer
+<body>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_function">Function</span><h1 class="sdoc_name">to_bits</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">conv</span>::<span class="sdoc_path_seg">impl_1</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">fn to_bits(self: int&#60;N&#62;) -&#62; [bool; N];</code></pre><p>Interpret a uint as the raw bit values. output[0] is the LSB of the integer
 and output[N-1] is the MSB</p>
 <p>Note that this means that 0b1100 will be [false, false, true, true] since arrays
 are written LSB first, while integers are written MSB first</p>
+</div>
 </body>
 
 </html>

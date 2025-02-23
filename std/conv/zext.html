@@ -6,11 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spade Documentation Index</title>
     <link rel="stylesheet" href="../../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../../spade-theme.css">
+    <script>hljs.highlightAll();</script>
 </head>
 
-<body><span class="sdoc_badge sdoc_badge_function">Function</span><h1 class="sdoc_name">zext</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">conv</span>
-</span></p><p>Zero extend the provided integer. Gives a compiler error if the output is smaller
+<body>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_function">Function</span><h1 class="sdoc_name">zext</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">conv</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">extern fn zext&#60;#uint N, #uint M&#62;(x: uint&#60;N&#62;) -&#62; uint&#60;M&#62;;</code></pre><p>Zero extend the provided integer. Gives a compiler error if the output is smaller
 than the input</p>
+</div>
 </body>
 
 </html>

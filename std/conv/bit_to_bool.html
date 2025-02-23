@@ -6,11 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spade Documentation Index</title>
     <link rel="stylesheet" href="../../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../../spade-theme.css">
+    <script>hljs.highlightAll();</script>
 </head>
 
-<body><span class="sdoc_badge sdoc_badge_function">Function</span><h1 class="sdoc_name">bit_to_bool</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">conv</span>
-</span></p><p>Casts a <code>bit</code> to a <code>bool</code>. low maps to false, high maps to true, but HIGHIMP is undefined.
+<body>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_function">Function</span><h1 class="sdoc_name">bit_to_bool</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">conv</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">fn bit_to_bool(b: bit) -&#62; bool;</code></pre><p>Casts a <code>bit</code> to a <code>bool</code>. low maps to false, high maps to true, but HIGHIMP is undefined.
 In practice, in a simulator, it will map to Z</p>
+</div>
 </body>
 
 </html>

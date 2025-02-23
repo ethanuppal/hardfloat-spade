@@ -6,11 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spade Documentation Index</title>
     <link rel="stylesheet" href="../../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../../spade-theme.css">
+    <script>hljs.highlightAll();</script>
 </head>
 
-<body><span class="sdoc_badge sdoc_badge_function">Function</span><h1 class="sdoc_name">concat</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">conv</span>
-</span></p><p>This is special cased by the compiler. The actual type, if Spade was able to express
+<body>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_function">Function</span><h1 class="sdoc_name">concat</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">std</span>::<span class="sdoc_path_seg">conv</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">extern fn concat&#60;
+    N,
+    M,
+    K
+&#62;(x: N, y: M) -&#62; K;</code></pre><p>This is special cased by the compiler. The actual type, if Spade was able to express
 it itself would be concat&lt;#uint N, #uint M&gt;(x: Number, y: Number) -&gt; Number&lt;N + M&gt;.</p>
+</div>
 </body>
 
 </html>

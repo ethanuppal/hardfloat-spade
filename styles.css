@@ -1,84 +1,126 @@
+:root {
+  --font-dm-sans: "DM Sans", sans-serif;
+  --font-segoe: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-courier: 'Courier New', Courier, monospace;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --badge-padding-vertical: var(--spacing-xs);
+  --badge-padding-horizontal: var(--spacing-sm);
+  --badge-border-radius: 0.7rem;
+  --badge-font-size: 0.9rem;
+  --badge-font-weight: 500;
+  --sdoc-name-font-size: 2.5rem;
+  --sdoc-name-margin: 0;
+  --listing-title-font-size: 1.25rem;
+  --listing-title-margin-top: 1.5rem;
+  --listing-title-margin-bottom: 1rem;
+  --listing-title-padding-top: 0.2rem;
+  --listing-title-padding-bottom: 0.6rem;
+  --listing-title-border-color: #dddddd;
+  --text-color: #000000;
+  --signature-bg: #f5f5f5;
+  --badge-bg-module: #6fb5e3;
+  --badge-bg-function: #9b70b8;
+  --badge-bg-entity: #ff9eaa;
+  --badge-bg-pipeline: #77ddb6;
+  --badge-bg-struct: #ffdb5c;
+  --badge-bg-enum: #c7e478;
+  --badge-bg-primitive: #ff8750;
+  --badge-bg-trait: #db5dd1;
+  --badge-text-color: #ffffff;
+}
+
 @font-face {
-    font-family: "DM Sans";
-    src: url("DMSans-VariableFont_opsz,wght.ttf");
+  font-family: "DM Sans";
+  src: url("DMSans-VariableFont_opsz,wght.ttf");
+}
+
+body {
+  font-family: var(--font-dm-sans);
 }
 
 .sdoc_badge {
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    padding-top: 0.1em;
-    padding-bottom: 0.1em;
-    border-radius: 11px;
-    font-family: "DM Sans", sans-serif;
-    font-weight: 500;
-    font-size: 11pt;
+  padding: var(--badge-padding-vertical) var(--badge-padding-horizontal);
+  border-radius: var(--badge-border-radius);
+  font-family: var(--font-dm-sans);
+  font-weight: var(--badge-font-weight);
+  font-size: var(--badge-font-size);
+  color: var(--badge-text-color);
 }
 
 .sdoc_badge_module {
-    background-color: #6fb5e3;
+  background-color: var(--badge-bg-module);
 }
 
 .sdoc_badge_function {
-    background-color: #9b70b8;
+  background-color: var(--badge-bg-function);
 }
 
 .sdoc_badge_entity {
-    background-color: #FF9EAA;
+  background-color: var(--badge-bg-entity);
 }
 
 .sdoc_badge_pipeline {
-    background-color: #77ddb6;
+  background-color: var(--badge-bg-pipeline);
 }
 
 .sdoc_badge_struct {
-    background-color: #FFDB5C;
+  background-color: var(--badge-bg-struct);
 }
 
 .sdoc_badge_enum {
-    background-color: #c7e478;
+  background-color: var(--badge-bg-enum);
 }
 
 .sdoc_badge_primitive {
-    background-color: #ff8750;
+  background-color: var(--badge-bg-primitive);
 }
 
 .sdoc_badge_trait {
-    background-color: #db5dd1;
+  background-color: var(--badge-bg-trait);
 }
 
 .sdoc_name {
-    margin-top: 0px;
-    margin-bottom: 0px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 30pt;
+  margin: var(--sdoc-name-margin);
+  font-family: var(--font-segoe);
+  font-size: var(--sdoc-name-font-size);
 }
 
 .sdoc_path {
-    margin-top: 0px;
-    color: #555555;
+  margin-top: 0;
+  color: var(--text-color);
 }
 
 .sdoc_path_whole {
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: 700;
+  font-family: var(--font-courier);
+  font-weight: 700;
 }
 
-.sdoc_path_seg {}
-
 .sdoc_item_listing_title {
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-    font-family: "DM Sans", sans-serif;
-    font-size: 16pt;
-    margin: 25px 0 15px 0;
-    display: block;
-    padding: 3px 0 9px 0;
+  width: 100%;
+  border-bottom: 1px solid var(--listing-title-border-color);
+  font-family: var(--font-dm-sans);
+  font-size: var(--listing-title-font-size);
+  margin: var(--listing-title-margin-top) 0 var(--listing-title-margin-bottom) 0;
+  display: block;
+  padding: var(--listing-title-padding-top) 0 var(--listing-title-padding-bottom) 0;
 }
 
 .clean_ul {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .sdoc_item_listed {
-    font-family: "DM Sans", sans-serif;
+  font-family: var(--font-dm-sans);
+}
+
+.sdoc_signature {
+  font-family: var(--font-courier);
+  padding: 0.5rem 0.25rem;
+  background-color: var(--signature-bg);
+  overflow: scroll;
+}
+pre.sdoc_signature > code {
+  font-family: var(--font-courier);
 }

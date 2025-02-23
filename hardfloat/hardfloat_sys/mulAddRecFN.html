@@ -6,10 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spade Documentation Index</title>
     <link rel="stylesheet" href="../../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../../spade-theme.css">
+    <script>hljs.highlightAll();</script>
 </head>
 
-<body><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">mulAddRecFN</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">hardfloat</span>::<span class="sdoc_path_seg">hardfloat_sys</span>
-</span></p><p>Description taken from Berkeley Hardfloat documentation:</p>
+<body>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">mulAddRecFN</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">hardfloat</span>::<span class="sdoc_path_seg">hardfloat_sys</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">extern entity mulAddRecFN&#60;#uint expWidth, #uint sigWidth&#62;(
+    control: uint&#60;1&#62;,
+    op: uint&#60;2&#62;,
+    a: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    b: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    c: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    roundingMode: uint&#60;3&#62;,
+    out: inv &#38;uint&#60;{expWidth + sigWidth + 1}&#62;,
+    exceptionFlags: inv &#38;uint&#60;5&#62;
+);</code></pre><p>Description taken from Berkeley Hardfloat documentation:</p>
 <p>Implements fused multiply-add as defined by the IEEE Floating-Point Standard.
 When <code>op</code> = 0, the module computes (<code>a × b</code>) + <code>c</code> with a single rounding.
 If one of the multiplication operands <code>a</code> and <code>b</code> is infinite and the other is zero, the invalid exception is indicated even if operand <code>c</code> is a quiet NaN.
@@ -22,6 +38,7 @@ The exact effects of <code>op</code> are summarized in this table:</p>
 1        1        −(a × b) − c
 </code></pre>
 <p>In all cases, the function is computed with only a single rounding, of course.</p>
+</div>
 </body>
 
 </html>
