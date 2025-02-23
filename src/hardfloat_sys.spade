@@ -10,11 +10,11 @@
 //
 // I've replaced all instances of `clog` with Spade's `uint_bytes_to_fit`.
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Converts from standard format into HardFloat’s equivalent recoded format.
 #[no_mangle(all)]
-extern entity fNToRecFN <#uint intWidth, #uint expWidth, #uint sigWidth>(
+extern entity fNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth>(
     control: uint<1>,
     signedIn: bool,
     in: uint<intWidth>,
@@ -23,7 +23,7 @@ extern entity fNToRecFN <#uint intWidth, #uint expWidth, #uint sigWidth>(
     exceptionFlags: inv &uint<5>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Converts back from a recoded format to standard format.
 #[no_mangle(all)]
@@ -32,7 +32,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      out: inv &uint<{expWidth + sigWidth}>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Converts from an integer type to floating-point in recoded form.
 /// The input named `in` is interpreted as an unsigned integer if `signedIn` is false, or as a signed integer if `signedIn` is true.
@@ -46,7 +46,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      exceptionFlags: inv &uint<5>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Performs a similar function, but returns a floating-point value in deconstructed form.
 #[no_mangle(all)]
@@ -59,7 +59,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      sig: inv &uint<{intWidth + 1}>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Converts from a floating-point value in recoded form to an integer type.
 /// The output named `out` is an unsigned integer if input `signedOut` is false, or is a signed integer if `signedOut` is true.
@@ -77,7 +77,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      intExceptionFlags: inv &uint<3>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Converts a recoded floating-point value to a different recoded format (such as from single-precision to double-precision, or vice versa).
 /// This module requires no special explanation.
@@ -90,7 +90,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      exceptionFlags: inv &uint<5>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Adds or subtracts two recoded floating-point values, returning a result in the same format.
 /// When input `subOp` is 0, the operation is addition (`a + b`), and when it is 1, the operation is subtraction (`a − b`).
@@ -105,7 +105,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      exceptionFlags: inv &uint<5>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Returns the intermediate result of addition or subtraction before rounding, as a “raw” deconstructed floating-point value with two extra bits of significand.
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
@@ -126,7 +126,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      out_sig: inv &uint<{sigWidth + 3}>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Multiplies two recoded floating-point values, returning a result in the same format.
 #[no_mangle(all)]
@@ -139,7 +139,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      exceptionFlags: inv &uint<5>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Returns the intermediate result of multiplication before rounding, as a “raw” deconstructed floating-point value with two extra bits of significand.
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
@@ -158,7 +158,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      out_sig: inv &uint<{sigWidth + 3}>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Implements fused multiply-add as defined by the IEEE Floating-Point Standard.
 /// When `op` = 0, the module computes (`a × b`) + `c` with a single rounding.
@@ -187,7 +187,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
      exceptionFlags: inv &uint<5>
 );
 
-/// Description taken from Berkeley Hardfloat documentation:
+/// Description taken from the Berkeley Hardfloat documentation:
 ///
 /// Returns the intermediate result of the fused multiply-add before rounding, as a “raw” deconstructed floating-point value with two extra bits of significand.
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
