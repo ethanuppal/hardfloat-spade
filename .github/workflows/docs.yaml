@@ -18,7 +18,7 @@ jobs:
     - uses: Swatinem/rust-cache@v2
 
     - name: Install Swim
-      run: cargo install --locked --git https://gitlab.com/ethanuppal/swim --rev 9871f3ab4fb64e78947be12622b066136bf42b91 # swim doc
+      run: cargo install --locked --git https://gitlab.com/ethanuppal/swim --branch swim-doc
 
     - name: Install spadedoc
       run: |
