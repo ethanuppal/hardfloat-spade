@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spade Documentation Index</title>
+    <link rel="stylesheet" href="../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../spade-theme.css">
+    <script>
+        hljs.highlightAll();
+    </script>
+</head>
+
+<body>
+    <input type="checkbox" id="sdoc_sidebar_toggle">
+    <header class="sdoc_header">
+        <label for="sdoc_sidebar_toggle" class="sdoc_sidebar_toggle sdoc_sidebar_label">
+            <!--https://tabler.io/icons-->
+            <svg class="sdoc_sidebar_hamburger" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 6l16 0" />
+                <path d="M4 12l16 0" />
+                <path d="M4 18l16 0" />
+            </svg>
+        </label>
+    </header>
+    <div class="sdoc_sidebar">
+        <nav>
+            <h2><a href="../index.html">hardfloat</a></h2>
+            <p>Also put table of contents for current page here with links</p>
+        </nav>
+    </div>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">mulAddRecFNToRaw</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">hardfloat_sys</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">extern entity mulAddRecFNToRaw&#60;#uint expWidth, #uint sigWidth&#62;(
+    control: uint&#60;1&#62;,
+    op: uint&#60;2&#62;,
+    a: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    b: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    c: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    roundingMode: uint&#60;3&#62;,
+    invalidExc: inv &#38;bool,
+    out_isNaN: inv &#38;bool,
+    out_isInf: inv &#38;bool,
+    out_isZero: inv &#38;bool,
+    out_sign: inv &#38;bool,
+    out_sExp: inv &#38;int&#60;{expWidth + 2}&#62;,
+    out_sig: inv &#38;uint&#60;{sigWidth + 3}&#62;
+);</code></pre><p>Description taken from the Berkeley Hardfloat documentation:</p>
+<p>Returns the intermediate result of the fused multiply-add before rounding, as a “raw” deconstructed floating-point value with two extra bits of significand.
+Boolean output <code>invalidExc</code> is true if the operation should raise an invalid exception.
+Module <code>roundRawFNToRecFN</code> can be used to round the intermediate result in conformance with the IEEE Standard.</p>
+</div>
+</body>
+
+</html>

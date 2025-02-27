@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spade Documentation Index</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="spade-highlight.js"></script>
-    <link rel="stylesheet" href="spade-theme.css">
+    <script src="../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../spade-theme.css">
     <script>
         hljs.highlightAll();
     </script>
@@ -31,13 +31,25 @@
     </header>
     <div class="sdoc_sidebar">
         <nav>
-            <h2><a href="index.html">hardfloat</a></h2>
+            <h2><a href="../index.html">hardfloat</a></h2>
             <p>Also put table of contents for current page here with links</p>
         </nav>
     </div>
-    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_module">Module</span><h1 class="sdoc_name">hardfloat</h1><p>Fully-conformant IEEE 754 floating-point API.</p>
-<h3 class="sdoc_item_listing_title">Modules</h3>
-<ul class="clean_ul"><li><a class="sdoc_item_listed" href="hardfloat_sys.html">hardfloat_sys</a></li><li><a class="sdoc_item_listed" href="hardfloat_sys_test.html">hardfloat_sys_test</a></li><li><a class="sdoc_item_listed" href="main_test.html">main_test</a></li></ul></div>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">fNToRecFN</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">hardfloat_sys</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">extern entity fNToRecFN&#60;
+    #uint intWidth,
+    #uint expWidth,
+    #uint sigWidth
+&#62;(
+    control: uint&#60;1&#62;,
+    signedIn: bool,
+    in: uint&#60;intWidth&#62;,
+    roundingMode: uint&#60;3&#62;,
+    out: inv &#38;uint&#60;{expWidth + sigWidth + 1}&#62;,
+    exceptionFlags: inv &#38;uint&#60;5&#62;
+);</code></pre><p>Description taken from the Berkeley Hardfloat documentation:</p>
+<p>Converts from standard format into HardFloat’s equivalent recoded format.</p>
+</div>
 </body>
 
 </html>

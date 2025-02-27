@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spade Documentation Index</title>
+    <link rel="stylesheet" href="../styles.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="../spade-highlight.js"></script>
+    <link rel="stylesheet" href="../spade-theme.css">
+    <script>
+        hljs.highlightAll();
+    </script>
+</head>
+
+<body>
+    <input type="checkbox" id="sdoc_sidebar_toggle">
+    <header class="sdoc_header">
+        <label for="sdoc_sidebar_toggle" class="sdoc_sidebar_toggle sdoc_sidebar_label">
+            <!--https://tabler.io/icons-->
+            <svg class="sdoc_sidebar_hamburger" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M4 6l16 0" />
+                <path d="M4 12l16 0" />
+                <path d="M4 18l16 0" />
+            </svg>
+        </label>
+    </header>
+    <div class="sdoc_sidebar">
+        <nav>
+            <h2><a href="../index.html">hardfloat</a></h2>
+            <p>Also put table of contents for current page here with links</p>
+        </nav>
+    </div>
+    <div class="sdoc_content"><span class="sdoc_badge sdoc_badge_entity">Entity</span><h1 class="sdoc_name">mulAddRecFN</h1><p class="sdoc_path">in <span class="sdoc_path_whole"><span class="sdoc_path_seg">hardfloat_sys</span>
+</span></p><pre class="sdoc_signature"><code class="language-spade">extern entity mulAddRecFN&#60;#uint expWidth, #uint sigWidth&#62;(
+    control: uint&#60;1&#62;,
+    op: uint&#60;2&#62;,
+    a: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    b: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    c: uint&#60;{expWidth + sigWidth + 1}&#62;,
+    roundingMode: uint&#60;3&#62;,
+    out: inv &#38;uint&#60;{expWidth + sigWidth + 1}&#62;,
+    exceptionFlags: inv &#38;uint&#60;5&#62;
+);</code></pre><p>Description taken from the Berkeley Hardfloat documentation:</p>
+<p>Implements fused multiply-add as defined by the IEEE Floating-Point Standard.
+When <code>op</code> = 0, the module computes (<code>a × b</code>) + <code>c</code> with a single rounding.
+If one of the multiplication operands <code>a</code> and <code>b</code> is infinite and the other is zero, the invalid exception is indicated even if operand <code>c</code> is a quiet NaN.
+The bits of input <code>op</code> affect the signs of the addends, making it possible to turn addition into subtraction (much like the <code>subOp</code> input to <code>addRecFN</code>).
+The exact effects of <code>op</code> are summarized in this table:</p>
+<pre><code>op[1]    op[0]    Function
+0        0        (a × b) + c
+0        1        (a × b) − c
+1        0        c − (a × b)
+1        1        −(a × b) − c
+</code></pre>
+<p>In all cases, the function is computed with only a single rounding, of course.</p>
+</div>
+</body>
+
+</html>
