@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/ethanuppal/hardfloat-spade/actions/workflows/ci.yaml/badge.svg)
 
-**[Read the documentation](https://ethanuppal.com/hardfloat-spade/hardfloat.html)**
+**[Read the documentation](https://ethanuppal.com/hardfloat-spade/index.html)**
 
 [Spade](https://spade-lang.org) wrappers for the [Berkley Hardfloat](https://github.com/ucb-bar/berkeley-hardfloat) floating-point library, powered by my [custom downstream patches](https://github.com/ethanuppal/berkeley-hardfloat).
 
