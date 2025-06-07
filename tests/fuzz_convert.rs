@@ -1,4 +1,7 @@
-use marlin::{spade::prelude::*, verilator::VerilatorRuntimeOptions};
+use marlin::{
+    spade::{prelude::*, SpadeModelConfig},
+    verilator::VerilatedModelConfig,
+};
 use rand::Rng;
 use snafu::Whatever;
 
@@ -10,18 +13,17 @@ struct UInt32ToFloat32;
 fn main() -> Result<(), Whatever> {
     colog::init();
 
-    let mut runtime = SpadeRuntime::new(SpadeRuntimeOptions {
+    let runtime = SpadeRuntime::new(SpadeRuntimeOptions {
         call_swim_build: false,
-        verilator_options: VerilatorRuntimeOptions {
-            log: true,
-            // hardfloat has these warnings
-            ignored_warnings: vec!["WIDTHTRUNC".into(), "WIDTHEXPAND".into()],
-            ..Default::default()
-        },
         ..Default::default()
     })?;
 
-    let mut uint32_to_float32 = runtime.create_model::<UInt32ToFloat32>()?;
+    let mut uint32_to_float32 = runtime.create_model::<UInt32ToFloat32>(SpadeModelConfig {
+        verilator_config: VerilatedModelConfig {
+            ignored_warnings: vec!["WIDTHTRUNC".into(), "WIDTHEXPAND".into()],
+            ..Default::default()
+        },
+    })?;
 
     let mut rng = rand::rng();
     for _ in 0..100 {
