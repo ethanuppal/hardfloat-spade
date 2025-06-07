@@ -231,6 +231,16 @@ body {
     padding: var(--listing-title-padding-top) 0 var(--listing-title-padding-bottom) 0;
 }
 
+.sdoc_impl_header {
+    width: 100%;
+    border-bottom: 1px solid var(--listing-title-border-color);
+    font-family: var(--font-courier);
+    font-size: var(--listing-title-font-size);
+    margin: var(--listing-title-margin-top) 0 var(--listing-title-margin-bottom) 0;
+    display: block;
+    padding: var(--listing-title-padding-top) 0 var(--listing-title-padding-bottom) 0;
+}
+
 .clean_ul {
     list-style-type: none;
 }
