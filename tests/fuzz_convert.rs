@@ -13,10 +13,7 @@ struct UInt32ToFloat32;
 fn main() -> Result<(), Whatever> {
     colog::init();
 
-    let runtime = SpadeRuntime::new(SpadeRuntimeOptions {
-        call_swim_build: false,
-        ..Default::default()
-    })?;
+    let runtime = SpadeRuntime::new(SpadeRuntimeOptions::default())?;
 
     let mut uint32_to_float32 = runtime.create_model::<UInt32ToFloat32>(SpadeModelConfig {
         verilator_config: VerilatedModelConfig {
