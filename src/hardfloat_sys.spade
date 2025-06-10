@@ -14,7 +14,7 @@
 ///
 /// Converts from standard format into HardFloat’s equivalent recoded format.
 #[no_mangle(all)]
-extern entity fNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth>(
+extern fn fNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth>(
     control: uint<1>,
     signedIn: bool,
     in: uint<intWidth>,
@@ -27,7 +27,7 @@ extern entity fNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth>(
 ///
 /// Converts back from a recoded format to standard format.
 #[no_mangle(all)]
-extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
+extern fn recFNToFN<#uint expWidth, #uint sigWidth>(
      in: uint<{expWidth + sigWidth + 1}>,
      out: inv &uint<{expWidth + sigWidth}>
 );
@@ -37,7 +37,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 /// Converts from an integer type to floating-point in recoded form.
 /// The input named `in` is interpreted as an unsigned integer if `signedIn` is false, or as a signed integer if `signedIn` is true.
 #[no_mangle(all)]
- extern entity iNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth>(
+ extern fn iNToRecFN<#uint intWidth, #uint expWidth, #uint sigWidth>(
      control: uint<1>,
      signedIn: bool,
      in: uint<intWidth>,
@@ -50,7 +50,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 ///
 /// Performs a similar function, but returns a floating-point value in deconstructed form.
 #[no_mangle(all)]
- extern entity iNToRawFN<#uint intWidth>(
+ extern fn iNToRawFN<#uint intWidth>(
      signedIn: bool,
      in: uint<intWidth>,
      isZero: inv &bool,
@@ -68,7 +68,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 /// Instead, if a system has no other way to indicate that a conversion to integer overflowed, the standard requires that the floating-point invalid exception be raised, not floating-point overflow.
 /// Hence, the invalid and overflow bits from `intExceptionFlags` will typically be ORed together to contribute to the usual floating-point invalid exception.
 #[no_mangle(all)]
- extern entity recFNToIN<#uint expWidth, #uint sigWidth, #uint intWidth>(
+ extern fn recFNToIN<#uint expWidth, #uint sigWidth, #uint intWidth>(
      control: uint<1>,
      in: uint<{expWidth + sigWidth + 1}>,
      roundingMode: uint<3>,
@@ -82,7 +82,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 /// Converts a recoded floating-point value to a different recoded format (such as from single-precision to double-precision, or vice versa).
 /// This module requires no special explanation.
 #[no_mangle(all)]
- extern entity recFNToRecFN<#uint inExpWidth, #uint inSigWidth, #uint outExpWidth, #uint outSigWidth>(
+ extern fn recFNToRecFN<#uint inExpWidth, #uint inSigWidth, #uint outExpWidth, #uint outSigWidth>(
      control: uint<1>,
      in: uint<{inExpWidth + inSigWidth + 1}>,
      roundingMode: uint<3>,
@@ -95,7 +95,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 /// Adds or subtracts two recoded floating-point values, returning a result in the same format.
 /// When input `subOp` is 0, the operation is addition (`a + b`), and when it is 1, the operation is subtraction (`a − b`).
 #[no_mangle(all)]
- extern entity addRecFN<#uint expWidth, #uint sigWidth>(
+ extern fn addRecFN<#uint expWidth, #uint sigWidth>(
      control: uint<1>,
      subOp: bool,
      a: uint<{expWidth + sigWidth + 1}>,
@@ -111,7 +111,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
 /// Module `roundRawFNToRecFN` can be used to round the intermediate result in conformance with the IEEE Standard.
 #[no_mangle(all)]
- extern entity addRecFNToRaw<#uint expWidth, #uint sigWidth>(
+ extern fn addRecFNToRaw<#uint expWidth, #uint sigWidth>(
      control: uint<1>,
      subOp: bool,
      a: uint<{expWidth + sigWidth + 1}>,
@@ -130,7 +130,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 ///
 /// Multiplies two recoded floating-point values, returning a result in the same format.
 #[no_mangle(all)]
- extern entity mulRecFN<#uint expWidth, #uint sigWidth>(
+ extern fn mulRecFN<#uint expWidth, #uint sigWidth>(
      control: uint<1>,
      a: uint<{expWidth + sigWidth + 1}>,
      b: uint<{expWidth + sigWidth + 1}>,
@@ -145,7 +145,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
 /// Module `roundRawFNToRecFN` can be used to round the intermediate result in conformance with the IEEE Standard.
 #[no_mangle(all)]
- extern entity mulRecFNToRaw<#uint expWidth, #uint sigWidth>(
+ extern fn mulRecFNToRaw<#uint expWidth, #uint sigWidth>(
      control: uint<1>,
      a: uint<{expWidth + sigWidth + 1}>,
      b: uint<{expWidth + sigWidth + 1}>,
@@ -176,7 +176,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 ///
 /// In all cases, the function is computed with only a single rounding, of course.
 #[no_mangle(all)]
- extern entity mulAddRecFN<#uint expWidth, #uint sigWidth>(
+ extern fn mulAddRecFN<#uint expWidth, #uint sigWidth>(
      control: uint<1>,
      op: uint<2>,
      a: uint<{expWidth + sigWidth + 1}>,
@@ -193,7 +193,7 @@ extern entity recFNToFN<#uint expWidth, #uint sigWidth>(
 /// Boolean output `invalidExc` is true if the operation should raise an invalid exception.
 /// Module `roundRawFNToRecFN` can be used to round the intermediate result in conformance with the IEEE Standard.
 #[no_mangle(all)]
- extern entity mulAddRecFNToRaw<#uint expWidth, #uint sigWidth>(
+ extern fn mulAddRecFNToRaw<#uint expWidth, #uint sigWidth>(
      control: uint<1>,
      op: uint<2>,
      a: uint<{expWidth + sigWidth + 1}>,
