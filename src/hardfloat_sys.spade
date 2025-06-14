@@ -208,3 +208,35 @@ extern fn recFNToFN<#uint expWidth, #uint sigWidth>(
      out_sExp: inv &int<{expWidth + 2}>,
      out_sig: inv &uint<{sigWidth + 3}>
 );
+
+
+
+/// Description taken from Berkeley HardFloat documentation:
+/// 
+/// Besides basic addition and multiplication, HardFloat has modules for
+/// computing either division or square root, where the choice of function is
+/// controlled by a module input. Implementing as they do the most complex
+/// operations that HardFloat supports, these combined division/square-root
+/// modules are unique within HardFloat for being sequential, meaning they take
+/// a clock input and execute over more than one clock cycle. The
+/// division/square-root modules in HardFloat use classic one-bit-per-cycle
+/// techniques that are simple and inexpensive but also slower than other known
+/// algorithms for computing division and square root. This character is
+/// reflected in the suffix ‘_small’ in the modules’ names.
+#[no_mangle(all)]
+extern entity divSqrtRecFN_small<#uint expWidth, #uint sigWidth>(
+    clock: clock,
+    nReset: bool,
+    control: uint<1>,
+    inReady: inv& bool,
+    inValid: bool,
+    sqrtOp: bool,
+    a: uint<{expWidth + sigWidth + 1}>,
+    b: uint<{expWidth + sigWidth + 1}>,
+    roundingMode: uint<3>,
+    outValid: inv &bool,
+    sqrtOpOut: inv &bool,
+    out: inv &uint<{expWidth + sigWidth + 1}>,
+    exceptionFlags: inv &uint<4>
+);
+
